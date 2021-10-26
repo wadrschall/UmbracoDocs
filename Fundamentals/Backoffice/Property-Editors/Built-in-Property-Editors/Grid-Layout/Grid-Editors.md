@@ -1,5 +1,7 @@
 ---
 versionFrom: 7.2.0
+versionTo: 9.0.0
+verified-against: 9.0.0
 ---
 
 # Grid Editors
