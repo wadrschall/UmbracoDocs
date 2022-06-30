@@ -100,7 +100,20 @@ if (e.ValueSet.Category == IndexTypes.Content)
     //Accessing the Umbraco Cache code will be added in the next step.
     //combinedFields.AppendLine(GetBreadcrumb(e.ValueSet.Values["id"].FirstOrDefault()?.ToString()));
 
+    //The TryAdd() method has been deprecated (Examine 3/Umbraco 10) and has been replaced by a clone/update process.
+    //Old Method:
     e.ValueSet.TryAdd("combinedField", combinedFields.ToString());
+    
+    //New Method:
+    //Clone the dictionary
+    var updatedValues = e.ValueSet.Values.ToDictionary(x => x.Key, x => x.Value.ToList());
+    
+    //Add Values
+    updatedValues.Add("combinedField", new List<object> { combinedFields.ToString() });
+    
+    //Update the item to utilize the cloned/updated dictionary
+    e.SetValues(updatedValues.ToDictionary(x => x.Key, x => (IEnumerable<object>)x.Value));
+
 
     
 }
@@ -193,9 +206,22 @@ if (e.ValueSet.Category == IndexTypes.Content)
     //Accessing the Umbraco Cache code will be added in the next step.
     //combinedFields.AppendLine(GetBreadcrumb(e.ValueSet.Values["id"].FirstOrDefault()?.ToString()));
 
+    //The TryAdd() method has been deprecated (Examine 3/Umbraco 10) and has been replaced by a clone/update process.
+    //Old Method:
     e.ValueSet.TryAdd("combinedField", combinedFields.ToString());
-
     e.ValueSet.TryAdd("searchPath", pathBuilder.ToString());
+    
+    //New Method
+    //Clone the dictionary
+    var updatedValues = e.ValueSet.Values.ToDictionary(x => x.Key, x => x.Value.ToList());
+    
+    //Add Values
+    updatedValues.Add("combinedField", new List<object> { combinedFields.ToString() });
+    updatedValues.Add("searchPath", new List<object> {  });
+    
+    //Update the item to utilize the cloned/updated dictionary
+    e.SetValues(updatedValues.ToDictionary(x => x.Key, x => (IEnumerable<object>)x.Value));
+   
     
 }
 ```
